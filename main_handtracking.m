@@ -26,16 +26,19 @@ while runLoop
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detect the hand from the frame
-    [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
+%     [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
+%     disp(hand_flag);
     
-    disp(hand_flag);
     % Display the annotated video frame using the video player object.
-    step(videoPlayer, result);
-    step(videoPlayer2, bw);
+%     step(videoPlayer, result);
+%     step(videoPlayer2, bw);
     
     %%%%%%%% Do image processing here %%%%%%%%%%%
     % Use the videoFrame for the current cropped image
-    
+    if hand_flag == 0
+        [move_array, dice_position] =  get_dice_results(videoFrame);
+        return;
+    end
     
     %%%%%%%%%%%%%%%%%%%%
     

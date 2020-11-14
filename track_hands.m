@@ -14,7 +14,7 @@ function [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, b
     bw = imbinarize(uint8(filteredForeground));
     % Detect blobs with min area and compute bounding boxes
     bbox = step(blobAnalysis, filteredForeground); 
-    
+
     if length(bbox) > 1
         hand_flag = 1; % Busy (hand detected)
     else
