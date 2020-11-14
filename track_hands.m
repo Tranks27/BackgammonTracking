@@ -1,5 +1,4 @@
-function [hand_flag] = track_hands(videoFrame, videoPlayer, ...
-    videoPlayer2, foregroundDetector, blobAnalysis)
+function [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis)
     
     % create kernals for mophological operations
     k = strel('square',4);
@@ -23,11 +22,5 @@ function [hand_flag] = track_hands(videoFrame, videoPlayer, ...
     end
     
     % Draw bounding boxes
-    result = insertShape(videoFrame, 'Rectangle', bbox, 'Color', 'green'); 
- 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Display the annotated video frame using the video player object.
-    step(videoPlayer, result);
-    step(videoPlayer2, bw);
-    
+    result = insertShape(videoFrame, 'Rectangle', bbox, 'Color', 'green');     
 end
