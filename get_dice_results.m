@@ -1,7 +1,7 @@
 function [move_array, dice_position] = get_dice_results(dice_im)
 % Segment the dice according to the YcBcR colour space
 segmented_dice = segment_dice(dice_im);
-
+dice_record = [];
 % Create a structuring element of size 3
 struct_elem = strel('square',3);
 process_im = imdilate(segmented_dice, struct_elem);

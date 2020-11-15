@@ -11,7 +11,7 @@ function [foregroundDetector, blobAnalysis] = init_handtracking_video(videoReade
         perspective_correct = imtransform(trainFrame, tform_param);
         trainFrame = imcrop(perspective_correct, crop_rectangle);
         % Detect the foreground mask
-        foreground = step(foregroundDetector,trainFrame);
+        step(foregroundDetector,trainFrame);
     end
 
     % Optimal learning rate to determine how quickly it adapts to changing

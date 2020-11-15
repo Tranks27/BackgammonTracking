@@ -34,14 +34,14 @@ while hasFrame(videoReader) && runLoop
     % display results
     step(videoPlayer, result); 
     
-    
-    if hand_flag == 0
+    while hand_flag == 0
         [move_array, dice_position] =  get_dice_results(frame);
         
         % display bouding boxes on die
         result_dice = insertShape(frame, 'Rectangle', dice_position, 'Color', 'red'); 
         step(videoPlayer, result_dice);
-%         return;
+        
+        hand_flag = 1;
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%

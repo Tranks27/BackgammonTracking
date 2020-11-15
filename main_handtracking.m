@@ -12,7 +12,7 @@ sampleFrame = snapshot(cam);
 [foregroundDetector, blobAnalysis] = init_handtracking(cam, tform_param, crop_rectangle);
 
 % Create the video player object.
-videoPlayer = vision.VideoPlayer('Position', crop_rectangle);
+videoPlayer = vision.VideoPlayer('Position', [70 70 crop_rectangle(3) crop_rectangle(4)]);
 videoPlayer2 = vision.VideoPlayer('Position', [50 50 crop_rectangle(3) crop_rectangle(4)]);
 
 runLoop = true;
@@ -26,18 +26,24 @@ while runLoop
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detect the hand from the frame
-%     [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
-%     disp(hand_flag);
+    [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
+    disp(hand_flag);
     
     % Display the annotated video frame using the video player object.
-%     step(videoPlayer, result);
-%     step(videoPlayer2, bw);
+    step(videoPlayer, result);
+    step(videoPlayer2, bw);
     
     %%%%%%%% Do image processing here %%%%%%%%%%%
     % Use the videoFrame for the current cropped image
-    if hand_flag == 0
+    while hand_flag == 0
+        
         [move_array, dice_position] =  get_dice_results(videoFrame);
-        return;
+
+        % display bouding boxes on die
+        result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
+        step(videoPlayer, result_dice);
+
+        hand_flag = 1;
     end
     
     %%%%%%%%%%%%%%%%%%%%
