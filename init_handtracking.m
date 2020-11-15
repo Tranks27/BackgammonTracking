@@ -1,7 +1,7 @@
 function [foregroundDetector, blobAnalysis] = init_handtracking(cam, tform_param, crop_rectangle)
     
     foregroundDetector = vision.ForegroundDetector('NumGaussians',3,...
-        'NumTrainingFrames',100);
+        'NumTrainingFrames',50);
 
     % Create blob anaylysis object
     blobAnalysis = vision.BlobAnalysis('BoundingBoxOutputPort', true, ...
@@ -9,7 +9,7 @@ function [foregroundDetector, blobAnalysis] = init_handtracking(cam, tform_param
         'MinimumBlobArea', 2000);
 
     % Train the model with first 100 frames of background
-    for i = 1:100
+    for i = 1:50
         trainFrame = snapshot(cam);
         % Correct the perspective of the frame
         perspective_correct = imtransform(trainFrame, tform_param);

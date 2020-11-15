@@ -26,6 +26,14 @@ process_im = ismember(label_matrix_dice, find(([dice_props_area.Area]>=250 & [di
 % Create bounding boxes around each of the suspected dice shapess
 dice_props = regionprops(process_im,'BoundingBox','Centroid');
 
+%%%%%%%%%%%%%%%%%% Tranks' addition: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%% if no dice is detected, return empty arrays%%%%%%%%%%%%%
+if isempty(dice_props)
+    move_array = [];
+    dice_position = [];
+    return;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Find the connected shapes
 find_pips = bwconncomp(~process_im);

@@ -35,7 +35,7 @@ while runLoop
     step(videoPlayer2, bw);
     
     %%%%%%%% Do image processing here %%%%%%%%%%%
-%     dice_detect_flag = 0;
+    dice_detect_flag = 0;
     % if hand is not detected, initiate dice detection
     if hand_flag == 0
         pause(1); % wait for the dice to settle
@@ -43,11 +43,11 @@ while runLoop
         [move_array, dice_position] =  get_dice_results(videoFrame);
         % if no dice detected, continue detection process
         if isempty(move_array)
-%             dice_detect_flag = 0;
-            disp("dice not detected, throw the dice again");
+            dice_detect_flag = 0;
+            disp("dice not detected");
         else
             % if dice is detected, draw bounding boxes on the dice
-%             dice_detect_flag = 1;
+            dice_detect_flag = 1;
             disp(move_array);
             % display bouding boxes on die
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
@@ -56,7 +56,7 @@ while runLoop
     end
     
     % While no motion is detected, keep on detecting
-    while hand_flag == 0 && runLoop
+    while hand_flag == 0 && dice_detect_flag == 0 && runLoop
         %%%%%%%%%%%%% do nothing%%%%%%%%%%%%%%%%
         
         videoFrame = snapshot(cam);

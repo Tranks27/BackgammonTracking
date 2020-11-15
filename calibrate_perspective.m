@@ -66,7 +66,11 @@ imshow(perspective_correct);
 title("Please crop the image to include the edges of the board.")
 
 [perspective_crop, crop_rectangle] = imcrop(perspective_correct);
- 
+
+clf;
+figure(1)
+imshow(perspective_crop);
+title("Cropped image");
 
 end
 end
