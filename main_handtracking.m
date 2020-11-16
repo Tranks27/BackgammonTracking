@@ -33,7 +33,15 @@ perspective_correct = imtransform(sampleFrame, tform_param);
 sampleFrame = imcrop(perspective_correct, crop_rectangle);
 
 % initiate checkers detection
-% [a,b] = initialStage(sampleFrame);
+boardSet = 0;
+while boardSet == 0
+    % Get the next frame.
+    videoFrame = snapshot(cam);
+    % Correct the perspective of the camera
+    perspective_correct = imtransform(videoFrame, tform_param);
+    videoFrame = imcrop(perspective_correct, crop_rectangle);
+    [a,b, boardSet] = initialStage(videoFrame);
+end
 
 turn_count = 0;
 % White starts first
@@ -81,11 +89,14 @@ while runLoop
             
             %%%%%%%checkers detection
             
-%             [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p);
-%             % reset count
-%             if turn_count == 3
-%                 turn_count = 0;
-%             end
+            [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p)
+            % reset count
+            turn_count = mod(turn_count, 3);
+            if finished_turn == 1
+                disp('next player');
+                finished_turn = 0;
+            end
+            
         end
     end
     

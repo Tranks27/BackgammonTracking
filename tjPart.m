@@ -17,9 +17,9 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
 
         % Get initial board
         buffer = videoFrame;
-        r = buffer(:,end:-1:1,1)';
-        g = buffer(:,end:-1:1,2)';
-        b = buffer(:,end:-1:1,3)';
+        r = buffer(end:-1:1,:,1)';
+        g = buffer(end:-1:1,:,2)';
+        b = buffer(end:-1:1,:,3)';
         image = cat(3, r, g, b);
         cropBackground(image);
         [idMatFull, pieces] = outputPieces();
@@ -37,9 +37,9 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
         % Check for first move
         while firstDone == 0
             buffer = videoFrame;
-            r = buffer(:,end:-1:1,1)';
-            g = buffer(:,end:-1:1,2)';
-            b = buffer(:,end:-1:1,3)';
+            r = buffer(end:-1:1,:,1)';
+            g = buffer(end:-1:1,:,2)';
+            b = buffer(end:-1:1,:,3)';
             image = cat(3, r, g, b);
             cropBackground(image);
             [idMatFirst, piecesFirst] = outputPieces();
@@ -51,7 +51,7 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
         if secondDone == 1
             finished = 1;
 
-            disp('Turn Finished. Next Player. \n');
+            disp('Turn Finished. Next Player.');
             % change turn
             if turn == 1
                 playerTurn = 2;
@@ -60,7 +60,7 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
             end
         end
 
-        disp('First Movement Successful. Next Movement. \n');
+        disp('First Movement Successful. Next Movement.');
     elseif count == 2
 
         idMatFull = idMatrix;
@@ -78,11 +78,11 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
             move1 = identifySecond(newRoll, turn, idMatFull, pieces, returnable, available, unavailable);
             while secondDone == 0
                 buffer = videoFrame;
-            r = buffer(:,end:-1:1,1)';
-            g = buffer(:,end:-1:1,2)';
-            b = buffer(:,end:-1:1,3)';
-            image = cat(3, r, g, b);
-            cropBackground(image);
+                r = buffer(end:-1:1,:,1)';
+                g = buffer(end:-1:1,:,2)';
+                b = buffer(end:-1:1,:,3)';
+                image = cat(3, r, g, b);
+                cropBackground(image);
                 [idMatSecond, piecesSecond] = outputPieces();
                 secondDone = secondMovement(pieces, piecesSecond, move1);
             end
@@ -90,7 +90,7 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
             pieces = piecesSecond;
             %finished = checkFinished(idMatFull);
         %end
-        disp('Second Movement Successful.\n');
+        disp('Second Movement Successful.');
         % change turn
         if turn == 1
             playerTurn = 2;
@@ -98,7 +98,7 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
             playerTurn = 1;
         end
 
-        disp('Turn Finished. Next Player. \n');
+        disp('Turn Finished. Next Player.');
         countNew = count + 1;
         finished = 1;
     end

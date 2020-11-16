@@ -9,7 +9,12 @@ function boardStatus = initiateBoard(idMatFull, pieces)
                             5 0 0 0 3 0 ...
                             5 0 0 0 0 2];
 
-    if initialBoardID == idMatFull && initialBoardPieces == pieces
+                        
+%     if initialBoardPieces == pieces
+%         
+%         disp(0);
+%     end
+    if initialBoardID == idMatFull
         
         boardStatus = 1;
     else
