@@ -8,9 +8,9 @@ function cropBackground(videoFrame)
     if row > col
         
         x1 = round(col/8);
-        x2 = round(row/50);
-        y1 = round(row/12);
-        y2 = round(row/46);
+        x2 = round(row/70);
+        y1 = round(row/11);
+        y2 = round(row/43);
         
         for j = round(col/2)-y1:round(col/2)+y1
 
@@ -24,9 +24,13 @@ function cropBackground(videoFrame)
         for j = 1:x1
             
             image(j,:,:) = 0;
+        end
+        for j = 1:x1-14
+            
             image(end-j + 1,:,:) = 0;
         end
-        for j = round(row/2)-x2:round(row/2)+x2
+        threshold = 1;
+        for j = round(row/2)-x2+threshold:round(row/2)+x2+15*threshold
             
             image(j,:,:) = 0;
         end

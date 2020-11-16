@@ -84,19 +84,23 @@ function [idMat, piecesMat] = outputPieces()
     qY = zeros(4, 2);
     if row > col
 
+        threshold1 = 1;
+        multiply1 = 15;
+        threshold2 = 14;
+
         x1 = round(col/8);
-        x2 = round(row/50);
-        y1 = round(row/12);
-        y2 = round(row/46);
+        x2 = round(row/70);
+        y1 = round(row/11);
+        y2 = round(row/43);
 
         qX(1,:) = [y2 + 1, col/2 - y1 - 1];
-        qY(1,:) = [row/2 + x2 + 1, row - x1];
+        qY(1,:) = [row/2 + x2 + 1 + multiply1*threshold1, row - x1 + threshold2];
         qX(2,:) = [y2 + 1, col/2 - y1 - 1];
         qY(2,:) = [x1 + 1, row/2 - x2 - 1];
         qX(3,:) = [col/2 + y1 + 1, col - y2];
-        qY(3,:) = [x1 + 1, row/2 - x2 - 1];
+        qY(3,:) = [x1 + 1, row/2 - x2 - 1 - threshold1];
         qX(4,:) = [col/2 + y1 + 1, col - y2];
-        qY(4,:) = [row/2 + x2 + 1, row - x1];
+        qY(4,:) = [row/2 + x2 + 1 + multiply1*threshold1, row - x1 + threshold2];
     else
 
         x1 = round(row/8);
