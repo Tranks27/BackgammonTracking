@@ -146,13 +146,9 @@ if(first_die_result > 6 || second_die_result > 6 || first_die_result + second_di
    
    move_array = [];
    
-elseif(first_die_result == second_die_result )
-    
-    move_array = [first_die_result, first_die_result, second_die_result, second_die_result];
-    
 else
     
-    move_array = [first_die_result, second_die_result];
+    move_array = sort([first_die_result, second_die_result],'descend');
     
 end
 

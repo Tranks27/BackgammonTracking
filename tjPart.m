@@ -5,13 +5,13 @@
 % Initial Setup
 function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, count, turn_player, idMatrix, pieceMatrix, move1, move1p)
     
-    recordedMoves = fopen('record.txt', 'w');
 
     finished = 0;
 
     % Return from Josiah
     diceRolls = move_array;
     turn = turn_player;
+    
 
     returnable = [0 0];
 
@@ -45,7 +45,8 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
             image = cat(3, r, g, b);
             cropBackground(image);
             [idMatFirst, piecesFirst] = outputPieces();
-            [firstDone, secondDone] = firstMovement(pieces, piecesFirst, move1, move1p);
+            %[firstDone, secondDone] = firstMovement(pieces, piecesFirst, move1, move1p);
+            firstDone = 1;
         end
         idMatFull = idMatFirst;
         pieces = piecesFirst;
@@ -65,11 +66,7 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
         % second move
         %if finished ~= 0
             newRoll = 0;
-            if abs(from - to) == diceRolls(1)
-                newRoll = diceRolls(2);
-            else
-                newRoll = diceRolls(1);
-            end
+            secondDone = 0;
             [available, unavailable] = availability(idMatFull, pieces, turn);
             move1 = identifySecond(newRoll, turn, idMatFull, pieces, returnable, available, unavailable);
             while secondDone == 0
@@ -80,7 +77,8 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
                 image = cat(3, r, g, b);
                 cropBackground(image);
                 [idMatSecond, piecesSecond] = outputPieces();
-                secondDone = secondMovement(pieces, piecesSecond, move1);
+                %secondDone = secondMovement(pieces, piecesSecond, move1);
+                secondDone = 1;
             end
             idMatFull = idMatSecond;
             pieces = piecesSecond;
@@ -107,36 +105,40 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
     
     playerString = "";
     status = "";
-    if count == 0 || count == 3
+    if count == 0 || count == 2
         
         if count == 0
             
-            status = strcpy("Start of Turn");
+            status = "Start of Turn";
         else
             
-            status = strcpy("End of Turn");
+            status = "End of Turn";
         end
         
-        if turn == 1
+        if turn_player == 1
             
-            playerString = strcpy("White");
+            playerString = "White";
             
         else
             
-            playerString = strcpy("Brown");
+            playerString = "Brown";
         end
         
-        outputString1 = strcat(playerString, " - ", status, ": \n");
-        outputString2 = strcat("Colour ID:      ", num2str(idMatFull),"\n");
-        outputString3 = strcat("No. of Pieces:  ",num2str(pieces), "\n");
-        
-        recordedMoves = [recordedMoves outputString1 outputString2 outputString3];
+        outputString1 = strcat(playerString, " - ", status, " - Dice Rolls:", num2str(move_array));
+        outputString2 = strcat("Colour ID:      ", num2str(idMatFull));
+        outputString3 = strcat("No. of Pieces:  ",num2str(pieces));
+        recordedMoves = fopen('record.txt', 'a+');
+        finalText = sprintf("%s\n%s\n%s\n",outputString1,outputString2,outputString3);
+        fwrite(recordedMoves, finalText);
+        fclose(recordedMoves);
     end
     
-    if count == 3
+    playerTurn = turn;
+    
+    if finished == 1
         
         % change turn
-        if turn == 1
+        if turn_player == 1
             playerTurn = 2;
         else
             playerTurn = 1;
@@ -145,6 +147,6 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
     
     
 
-    playerTurn = turn;
+
     finished_turn = finished;
 end

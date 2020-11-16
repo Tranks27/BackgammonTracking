@@ -7,7 +7,7 @@ function secondFlag = secondMovement(pieces, piecesSecond, move1)
     to = changePieces == 1;
 
     flagLegal = 0;
-    % Check for first roll
+    % Check for second roll
     for i = 1:length(move1(1,:))
         if move1(:,i) == [from;to]
             flagLegal = 1;
@@ -19,5 +19,5 @@ function secondFlag = secondMovement(pieces, piecesSecond, move1)
 %         fprintf('Illegal Move! Please Move Again.\n');
 %     end
 
-    flagLegal = 1;
+    secondFlag = 1;
 end

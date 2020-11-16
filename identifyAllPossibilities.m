@@ -1,12 +1,5 @@
-function [move1 move1p] = identifyAllPossibilities(diceRoll, turn, idMatFull, pieces, returnable, available, unavailable)
+function [move1 move1p] = identifyAllPossibilities(diceRolls, turn, idMatFull, pieces, returnable, available, unavailable)
 
-    if length(diceRoll) == 4
-        
-        diceRolls = diceRoll(1:2);
-    else
-        
-        diceRolls = diceRoll;
-    end
     
     % White & Brown
     if returnable(turn) == 0

@@ -36,7 +36,7 @@ cam.Pan= 0;
 sampleFrame = snapshot(cam);
 [tform_param, crop_rectangle] = calibrate_perspective(sampleFrame);
     
-for i = 1:20
+for i = 56:80
     frame = snapshot(cam);
     perspective_correct = imtransform(frame, tform_param);
     frame = imcrop(perspective_correct, crop_rectangle);

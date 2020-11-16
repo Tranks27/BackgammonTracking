@@ -43,6 +43,14 @@ while boardSet == 0
     [a,b, boardSet] = initialStage(videoFrame);
 end
 
+global movement
+movement = 0;
+
+recordedMoves = fopen('record.txt', 'w');
+finalText = sprintf("Backgammon Record\n");
+fwrite(recordedMoves, finalText);
+fclose(recordedMoves);
+
 turn_count = 0;
 % White starts first
 turn_player = 1;

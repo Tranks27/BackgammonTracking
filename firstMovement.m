@@ -1,11 +1,18 @@
 function [firstFlag, secondFlag] = firstMovement(pieces, piecesFirst, move1, move1p)
 
+%     global movement
+% 
+%     checkPoint = piecesFirst - pieces;
+%     from = 0;
+%     to = 0;
+%     
+%     for i = 1:length(checkPoint)
+%         
+%         
+%     end
+
     firstFlag = 0;
     secondFlag = 0;
-
-    changePieces = piecesFirst - pieces;
-    from = changePieces == -1;
-    to = changePieces == 1;
 
     flagLegal = 0;
     % Check for first roll
@@ -30,5 +37,5 @@ function [firstFlag, secondFlag] = firstMovement(pieces, piecesFirst, move1, mov
 %         fprintf('Illegal Move! Please Move Again.\n');
 %     end
 
-    flagLegal = 1;
+    firstFlag = 1;
 end
