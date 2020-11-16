@@ -13,7 +13,7 @@ function [BW,maskedRGBImage] = segment_dice(RGB)
 % Convert RGB image to chosen color space
 I = rgb2ycbcr(RGB);
 
-% Define thresholds for channel 1 based on histogram settings
+% Define thresholds for channel 1 based on histogram settings % 145
 channel1Min = 145.000;
 channel1Max = 255.000;
 

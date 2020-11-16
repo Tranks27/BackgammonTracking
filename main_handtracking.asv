@@ -28,7 +28,7 @@ while runLoop
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detect the hand from the frame
     [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
-%     disp(hand_flag);
+    disp(hand_flag);
     
     % Display the annotated video frame using the video player object.
     step(videoPlayer, result);
@@ -49,6 +49,9 @@ while runLoop
             % display bouding boxes on die
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
             step(videoPlayer, result_dice);
+            
+            %%%%%%%%%%%checkers detection%%%%%%
+            
         end
     end
     

@@ -6,9 +6,9 @@ dice_record = [];
 struct_elem = strel('square',3);
 process_im = imdilate(segmented_dice, struct_elem);
 
-% figure(1);
-% clf
-% imshow(process_im);
+%  figure(4);
+%  clf
+%  imshow(segmented_dice);
 % Find the connected shapes
 shape_second_die = bwconncomp(process_im);
 get_num_pixels = cellfun(@numel,shape_second_die.PixelIdxList);
@@ -23,6 +23,12 @@ label_matrix_dice = labelmatrix(shape_second_die);
 % +- 10% with one dice or 2 dice together) 
 process_im = ismember(label_matrix_dice, find(([dice_props_area.Area]>=250 & [dice_props_area.Area]<=3700)));
 
+
+
+%  figure(5);
+%  clf
+%  imshow(process_im);
+ 
 % Create bounding boxes around each of the suspected dice shapess
 dice_props = regionprops(process_im,'BoundingBox','Centroid');
 
@@ -36,12 +42,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Find the connected shapes
-find_pips = bwconncomp(~process_im);
+find_pips = bwconncomp(~segmented_dice);
 get_num_pixels_pip = cellfun(@numel,shape_second_die.PixelIdxList);
-
-% figure(2);
-% clf
-% imshow(find_pips);
 
 % Get the areas of all the shapes in the processed filtered image
 pip_props_area = regionprops(find_pips,'Area');
@@ -52,6 +54,10 @@ label_matrix_pips = labelmatrix(find_pips);
 find_pips = ismember(label_matrix_pips, find(([pip_props_area.Area]<=40)));
 
 pip_props = regionprops(find_pips,'Centroid');
+
+% figure(6);
+%  clf
+%  imshow(find_pips);
 
 num_matches_found = 0;
 
