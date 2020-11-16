@@ -1,4 +1,10 @@
 function [move_array, dice_position] = get_dice_results(dice_im)
+
+dice_im = cropBackgroundForDice(dice_im);
+
+% figure(20)
+% imshow(dice_im);
+
 % Segment the dice according to the YcBcR colour space
 segmented_dice = segment_dice(dice_im);
 dice_record = [];
@@ -6,9 +12,6 @@ dice_record = [];
 struct_elem = strel('square',3);
 process_im = imdilate(segmented_dice, struct_elem);
 
-%  figure(4);
-%  clf
-%  imshow(segmented_dice);
 % Find the connected shapes
 shape_second_die = bwconncomp(process_im);
 get_num_pixels = cellfun(@numel,shape_second_die.PixelIdxList);
@@ -23,26 +26,12 @@ label_matrix_dice = labelmatrix(shape_second_die);
 % +- 10% with one dice or 2 dice together) 
 process_im = ismember(label_matrix_dice, find(([dice_props_area.Area]>=250 & [dice_props_area.Area]<=3700)));
 
-
-
-%  figure(5);
-%  clf
-%  imshow(process_im);
- 
 % Create bounding boxes around each of the suspected dice shapess
 dice_props = regionprops(process_im,'BoundingBox','Centroid');
 
-%%%%%%%%%%%%%%%%%% Tranks' addition: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%% if no dice is detected, return empty arrays%%%%%%%%%%%%%
-if isempty(dice_props)
-    move_array = [];
-    dice_position = [];
-    return;
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Find the connected shapes
-find_pips = bwconncomp(~segmented_dice);
+find_pips = bwconncomp(~process_im);
 get_num_pixels_pip = cellfun(@numel,shape_second_die.PixelIdxList);
 
 % Get the areas of all the shapes in the processed filtered image
@@ -54,10 +43,6 @@ label_matrix_pips = labelmatrix(find_pips);
 find_pips = ismember(label_matrix_pips, find(([pip_props_area.Area]<=40)));
 
 pip_props = regionprops(find_pips,'Centroid');
-
-% figure(6);
-%  clf
-%  imshow(find_pips);
 
 num_matches_found = 0;
 
@@ -78,7 +63,14 @@ for dice_idx = 1:length(dice_props)
     end
     
 end
-
+%%%%%%%%%%%%%%%%%% Tranks' addition: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%% if no dice is detected, return empty arrays%%%%%%%%%%%%%
+if isempty(dice_record)
+    move_array = [];
+    dice_position = [];
+    return;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Find the most frequent dice index
 [first_die,freq] = mode(dice_record);
 
@@ -165,8 +157,8 @@ else
 end
 
 % Return the position of the bounding boxes
-% rectangle('Position',show_dice.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
-% rectangle('Position',show_dice2.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
+%rectangle('Position',show_dice.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
+    %rectangle('Position',show_dice2.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
 
 end
 

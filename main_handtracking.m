@@ -2,7 +2,20 @@ clc;
 clear;
 % Using live cam
 cam = webcam(2);
+% camera calibration
 cam.Resolution = '1280x720';
+cam.ExposureMode= 'manual';
+cam.Exposure = -7;
+cam.WhiteBalanceMode = 'manual';
+cam.WhiteBalance = 5000;
+cam.Zoom= 0;
+cam.Contrast= 10;
+cam.BacklightCompensation= 1;
+cam.Sharpness= 50;
+cam.Brightness= 255;
+cam.Saturation= 30;
+cam.Tilt= 0;
+cam.Pan= 0;
 
 % Calibrate for perspective change and cropping
 sampleFrame = snapshot(cam);
@@ -20,9 +33,8 @@ perspective_correct = imtransform(sampleFrame, tform_param);
 sampleFrame = imcrop(perspective_correct, crop_rectangle);
 
 % initiate checkers detection
-[a,b] = initialStage(sampleFrame);
+% [a,b] = initialStage(sampleFrame);
 
-return;
 turn_count = 0;
 % White starts first
 turn_player = 1;
@@ -69,11 +81,11 @@ while runLoop
             
             %%%%%%%checkers detection
             
-            [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p);
-            % reset count
-            if turn_count == 3
-                turn_count = 0;
-            end
+%             [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p);
+%             % reset count
+%             if turn_count == 3
+%                 turn_count = 0;
+%             end
         end
     end
     
