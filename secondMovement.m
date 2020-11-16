@@ -15,7 +15,9 @@ function secondFlag = secondMovement(pieces, piecesSecond, move1)
         end
     end
     % check if illegal
-    if flagLegal == 0
-        fprintf('Illegal Move! Please Move Again.\n');
-    end
+%     if flagLegal == 0
+%         fprintf('Illegal Move! Please Move Again.\n');
+%     end
+
+    flagLegal = 1;
 end
