@@ -4,23 +4,19 @@
 
 % Initial Setup
 function finished_turn = tjPart(videoFrame, move_array)
-    filename = strcat('cropped_1.jpeg');
-    image = imread(filename); % Will be edited out as variable passed on by Tranks
-    cropBackground(image);
-    [idMatFull, pieces] = outputPieces();
     
     finished = 0;
 
     while finished == 0 && boardSetup == 1
 
         % Return from Josiah
-        diceRolls = [randi(6) randi(6)];
+        diceRolls = move_array;
         turn = randi(2);
 
         returnable = [0 0];
 
         % Get initial board
-        image = imread(filename); % Will be edited out as variable passed on by Tranks
+        image = videoFrame; % Will be edited out as variable passed on by Tranks
         cropBackground(image);
         [idMatFull, pieces] = outputPieces();
         [available, unavailable] = availability(idMatFull, pieces, turn);

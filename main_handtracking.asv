@@ -15,6 +15,12 @@ sampleFrame = snapshot(cam);
 videoPlayer = vision.VideoPlayer('Position', [100 100 crop_rectangle(3) crop_rectangle(4)]);
 videoPlayer2 = vision.VideoPlayer('Position', [100 100 crop_rectangle(3) crop_rectangle(4)]);
 
+% Correct the perspective of the camera
+perspective_correct = imtransform(sampleFrame, tform_param);
+sampleFrame = imcrop(perspective_correct, crop_rectangle);
+
+% initiate checkers detection
+initialStage(sampleFrame);
 
 runLoop = true;
 while runLoop
@@ -28,7 +34,7 @@ while runLoop
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Detect the hand from the frame
     [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
-    disp(hand_flag);
+%     disp(hand_flag);
     
     % Display the annotated video frame using the video player object.
     step(videoPlayer, result);
@@ -50,8 +56,7 @@ while runLoop
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
             step(videoPlayer, result_dice);
             
-            %%%%%%%%%%%checkers detection%%%%%%
-            
+            %%%%%%%checkers 
         end
     end
     

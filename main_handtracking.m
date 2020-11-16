@@ -15,6 +15,13 @@ sampleFrame = snapshot(cam);
 videoPlayer = vision.VideoPlayer('Position', [100 100 crop_rectangle(3) crop_rectangle(4)]);
 videoPlayer2 = vision.VideoPlayer('Position', [100 100 crop_rectangle(3) crop_rectangle(4)]);
 
+% Correct the perspective of the camera
+perspective_correct = imtransform(sampleFrame, tform_param);
+sampleFrame = imcrop(perspective_correct, crop_rectangle);
+
+% initiate checkers detection
+initialStage(sampleFrame);
+turn_count = 0;
 
 runLoop = true;
 while runLoop
@@ -49,6 +56,15 @@ while runLoop
             % display bouding boxes on die
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
             step(videoPlayer, result_dice);
+            
+            %%%%%%%checkers detection
+            
+                
+            [finished_turn, turn_count] = tjPart(videoFrame, move_array, turn_count);
+            % reset count
+            if turn_count == 2
+                turn_count = 0;
+            end
         end
     end
     
