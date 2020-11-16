@@ -6,13 +6,28 @@ function [dice_result1, dice_result2] = read2_dice(cropped_dice_im)
     % Use the segment function to segment out dice
     segmented_dice = hard_dice_face(cropped_dice_im);
 
-    % Morphologically apply a filter on the image to dilate the pips
-    struct_elem = strel('square',4);
-    morph = imdilate(segmented_dice,struct_elem);
+    
+    % Expand the image so that there are more pixels to work with
+    segmented_dice = imresize(segmented_dice,30);
+    
 
+    % Morphologically apply a filter on the image to dilate the pips
+    struct_elem = strel('disk',50);
+    morph = imdilate(segmented_dice,struct_elem);
+    
+    struct_elem2 = strel('disk',5);
+    morph = imerode(morph,struct_elem2);
+    
+    % Pad the dice so that the outside "corners" get connected into one big
+    % shape (easier to filter later)
+    padded_dice_im = padarray(morph,[60,60],0, 'both');
+
+    figure(15)
+    imshow(~padded_dice_im);
+    
     % Count the shapes and their pixel areas
-    find_shapes = bwconncomp(~morph);
-    get_pixels = cellfun(@numel,find_shapes.PixelIdxList);
+    find_shapes = bwconncomp(~padded_dice_im);
+    get_pixels = cellfun(@numel,find_shapes.PixelIdxList)
 
     % Get the areas of all the shapes through regionprops
     get_pix_area = regionprops(find_shapes,'Area');
@@ -22,7 +37,7 @@ function [dice_result1, dice_result2] = read2_dice(cropped_dice_im)
 
     % Find the pips that are roughly the same size (based off smallest
     % object)
-    find_shapes = ismember(label_matrix_dice, find(([get_pix_area.Area]<=min(get_pixels)*3)));
+    find_shapes = ismember(label_matrix_dice, find(([get_pix_area.Area]<=min(get_pixels)*100)));
 
     % Count the final result on the dice
     count_final = bwconncomp(find_shapes);
@@ -33,7 +48,7 @@ function [dice_result1, dice_result2] = read2_dice(cropped_dice_im)
     % Clustering dots by k-means
     cluster_idx = kmeans(stats.Centroid,2);
     
- 
+
     % Count using a histogram counter method
     [num] = histcounts(cluster_idx,2);
     

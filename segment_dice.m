@@ -13,17 +13,17 @@ function [BW,maskedRGBImage] = segment_dice(RGB)
 % Convert RGB image to chosen color space
 I = rgb2ycbcr(RGB);
 
-% Define thresholds for channel 1 based on histogram settings
+% Define thresholds for channel 1 based on histogram settings % 145
 channel1Min = 145.000;
 channel1Max = 255.000;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 122.000;
-channel2Max = 190.000;
+channel2Min = 0.000;
+channel2Max = 255.000;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 119.000;
-channel3Max = 150.000;
+channel3Min = 0.000;
+channel3Max = 255.000;
 
 % Create mask based on chosen histogram thresholds
 sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...

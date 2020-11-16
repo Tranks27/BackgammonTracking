@@ -1,4 +1,10 @@
 function [move_array, dice_position] = get_dice_results(dice_im)
+
+dice_im = cropBackgroundForDice(dice_im);
+
+% figure(20)
+% imshow(dice_im);
+
 % Segment the dice according to the YcBcR colour space
 segmented_dice = segment_dice(dice_im);
 dice_record = [];
@@ -6,9 +12,6 @@ dice_record = [];
 struct_elem = strel('square',3);
 process_im = imdilate(segmented_dice, struct_elem);
 
-% figure(1);
-% clf
-% imshow(process_im);
 % Find the connected shapes
 shape_second_die = bwconncomp(process_im);
 get_num_pixels = cellfun(@numel,shape_second_die.PixelIdxList);
@@ -26,22 +29,10 @@ process_im = ismember(label_matrix_dice, find(([dice_props_area.Area]>=250 & [di
 % Create bounding boxes around each of the suspected dice shapess
 dice_props = regionprops(process_im,'BoundingBox','Centroid');
 
-%%%%%%%%%%%%%%%%%% Tranks' addition: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%% if no dice is detected, return empty arrays%%%%%%%%%%%%%
-if isempty(dice_props)
-    move_array = [];
-    dice_position = [];
-    return;
-end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Find the connected shapes
 find_pips = bwconncomp(~process_im);
 get_num_pixels_pip = cellfun(@numel,shape_second_die.PixelIdxList);
-
-% figure(2);
-% clf
-% imshow(find_pips);
 
 % Get the areas of all the shapes in the processed filtered image
 pip_props_area = regionprops(find_pips,'Area');
@@ -72,7 +63,14 @@ for dice_idx = 1:length(dice_props)
     end
     
 end
-
+%%%%%%%%%%%%%%%%%% Tranks' addition: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%% if no dice is detected, return empty arrays%%%%%%%%%%%%%
+if isempty(dice_record)
+    move_array = [];
+    dice_position = [];
+    return;
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Find the most frequent dice index
 [first_die,freq] = mode(dice_record);
 
@@ -148,19 +146,15 @@ if(first_die_result > 6 || second_die_result > 6 || first_die_result + second_di
    
    move_array = [];
    
-elseif(first_die_result == second_die_result )
-    
-    move_array = [first_die_result, first_die_result, second_die_result, second_die_result];
-    
 else
     
-    move_array = [first_die_result, second_die_result];
+    move_array = sort([first_die_result, second_die_result],'descend');
     
 end
 
 % Return the position of the bounding boxes
-% rectangle('Position',show_dice.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
-% rectangle('Position',show_dice2.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
+%rectangle('Position',show_dice.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
+    %rectangle('Position',show_dice2.BoundingBox, 'EdgeColor', 'r', 'LineWidth', 1.5);
 
 end
 

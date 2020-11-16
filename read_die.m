@@ -5,18 +5,20 @@ function [dice_result] = read_die(cropped_dice_im)
     % Use the segment function to segment out dice
     segmented_dice = hard_dice_face(cropped_dice_im);
     
+    segmented_dice = imresize(segmented_dice,30);
+
 
     % Morphologically apply a filter on the image to dilate the pips
-    struct_elem = strel('square',2);
+    struct_elem = strel('disk',46);
     morph = imdilate(segmented_dice,struct_elem);
     
-    padded_dice_im = padarray(morph,[2,2],0, 'both');
+    padded_dice_im = padarray(morph,[60,60],0, 'both');
 
    
 
     % Count the shapes and their pixel areas
     find_shapes = bwconncomp(~padded_dice_im);
-    get_pixels = cellfun(@numel,find_shapes.PixelIdxList);
+    get_pixels = cellfun(@numel,find_shapes.PixelIdxList)
     
     % Get the areas of all the shapes through regionprops
     get_pix_area = regionprops(find_shapes,'Area');
@@ -26,16 +28,13 @@ function [dice_result] = read_die(cropped_dice_im)
 
     find_min = min(get_pixels);
     
-    if(find_min < 6)
-       find_min = 10; 
-    end
     % Find the pips that are roughly the same size (based off smallest
     % object)
-    find_shapes = ismember(label_matrix_dice, find(([get_pix_area.Area]<=find_min*2.5)));
+    find_shapes = ismember(label_matrix_dice, find(([get_pix_area.Area]<=find_min*100)));
 
-%     figure
-%     clf;
-%     imshow(~find_shapes)
+    figure
+    clf;
+    imshow(~padded_dice_im)
     
     % Count the final result on the dice
     count_final = bwconncomp(find_shapes);
