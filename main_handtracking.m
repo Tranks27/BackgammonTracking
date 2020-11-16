@@ -62,7 +62,7 @@ while runLoop
                 
             [finished_turn, turn_count] = tjPart(videoFrame, move_array, turn_count);
             % reset count
-            if turn_count == 2
+            if turn_count == 3
                 turn_count = 0;
             end
         end
