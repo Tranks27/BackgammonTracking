@@ -7,13 +7,30 @@ clc;
 clf;
 close all;
 
-diceRolls = [randi(6) randi(6)];
-turn = randi(2);
-
-returnable = [1 1];
-
+% Initial Setup
 cropBackground();
 [idMatFull, pieces] = outputPieces();
-[available, unavailable] = availability(idMatFull, pieces, turn);
-[move1 move2 move1p] = identifyAllPossibilities(diceRolls, turn, idMatFull, pieces, returnable, available, unavailable);
+boardSetup = initiateBoard(idMatFull, pieces);
+boardSetup = 1;
+finished = 0;
+
+% disp(1);
+while finished == 0 && boardSetup == 1
+    
+    diceRolls = [randi(6) randi(6)];
+    turn = randi(2);
+
+    returnable = [0 0];
+
+    cropBackground();
+    [idMatFull, pieces] = outputPieces();
+    [available, unavailable] = availability(idMatFull, pieces, turn);
+    [move1 move2 move1p] = identifyAllPossibilities(diceRolls, turn, idMatFull, pieces, returnable, available, unavailable);
+    
+    finished = checkFinished(idMatFull);
+    
+%     finished = 1;
+%     disp(2);
+end
+
 
