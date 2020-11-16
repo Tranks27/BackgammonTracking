@@ -1,4 +1,4 @@
-function [idMatFull, pieces] = initialStage(videoFrame)
+function initialStage(videoFrame)
 
     boardSetup = 0;
 
@@ -14,7 +14,7 @@ function [idMatFull, pieces] = initialStage(videoFrame)
             disp('Error! Initial Setup Not Detected. \n');
         else
             
-            disp('Initiation Successful.\n');
+            disp('Initiation ');
         end
     end
 end
