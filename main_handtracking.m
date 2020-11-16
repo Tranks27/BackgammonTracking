@@ -20,10 +20,18 @@ perspective_correct = imtransform(sampleFrame, tform_param);
 sampleFrame = imcrop(perspective_correct, crop_rectangle);
 
 % initiate checkers detection
-initialStage(sampleFrame);
+[a,b] = initialStage(sampleFrame);
+
+return;
 turn_count = 0;
 % White starts first
 turn_player = 1;
+
+% ID matrices and pieces
+id_Matrix = [];
+pieces_Matrix = [];
+move_1 = [];
+move_1p = [];
 
 runLoop = true;
 while runLoop
@@ -61,8 +69,7 @@ while runLoop
             
             %%%%%%%checkers detection
             
-                
-            [finished_turn, turn_count, turn_player] = tjPart(videoFrame, move_array, turn_count, turn_player);
+            [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p);
             % reset count
             if turn_count == 3
                 turn_count = 0;
