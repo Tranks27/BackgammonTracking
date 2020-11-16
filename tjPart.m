@@ -16,7 +16,11 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
     if count == 0
 
         % Get initial board
-        image = videoFrame; % Will be edited out as variable passed on by Tranks
+        buffer = videoFrame;
+        r = buffer(:,end:-1:1,1)';
+        g = buffer(:,end:-1:1,2)';
+        b = buffer(:,end:-1:1,3)';
+        image = cat(3, r, g, b);
         cropBackground(image);
         [idMatFull, pieces] = outputPieces();
         [available, unavailable] = availability(idMatFull, pieces, turn);
@@ -32,7 +36,11 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
         secondDone = 0;
         % Check for first move
         while firstDone == 0
-            image = videoFrame; % Will be edited out as variable passed on by Tranks
+            buffer = videoFrame;
+            r = buffer(:,end:-1:1,1)';
+            g = buffer(:,end:-1:1,2)';
+            b = buffer(:,end:-1:1,3)';
+            image = cat(3, r, g, b);
             cropBackground(image);
             [idMatFirst, piecesFirst] = outputPieces();
             [firstDone, secondDone] = firstMovement(pieces, piecesFirst, move1, move1p);
@@ -69,8 +77,12 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
             [available, unavailable] = availability(idMatFull, pieces, turn);
             move1 = identifySecond(newRoll, turn, idMatFull, pieces, returnable, available, unavailable);
             while secondDone == 0
-                image = imread(filename); % Will be edited out as variable passed on by Tranks
-                cropBackground(image);
+                buffer = videoFrame;
+            r = buffer(:,end:-1:1,1)';
+            g = buffer(:,end:-1:1,2)';
+            b = buffer(:,end:-1:1,3)';
+            image = cat(3, r, g, b);
+            cropBackground(image);
                 [idMatSecond, piecesSecond] = outputPieces();
                 secondDone = secondMovement(pieces, piecesSecond, move1);
             end

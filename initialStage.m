@@ -4,7 +4,11 @@ function [idMatFull, pieces] = initialStage(videoFrame)
 
     while boardSetup == 0
 
-        image = videoFrame;
+        buffer = videoFrame;
+        r = buffer(:,end:-1:1,1)';
+        g = buffer(:,end:-1:1,2)';
+        b = buffer(:,end:-1:1,3)';
+        image = cat(3, r, g, b);
         cropBackground(image);
         [idMatFull, pieces] = outputPieces();
         boardSetup = initiateBoard(idMatFull, pieces);
