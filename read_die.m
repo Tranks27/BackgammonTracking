@@ -32,9 +32,9 @@ function [dice_result] = read_die(cropped_dice_im)
     % object)
     find_shapes = ismember(label_matrix_dice, find(([get_pix_area.Area]<=find_min*100)));
 
-    figure
-    clf;
-    imshow(~padded_dice_im)
+%     figure
+%     clf;
+%     imshow(~padded_dice_im)
     
     % Count the final result on the dice
     count_final = bwconncomp(find_shapes);

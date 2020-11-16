@@ -2,7 +2,7 @@ clc;
 clear;
 
 path_name = 'C:\Users\might\Desktop\Year 4 Sem 2\AMME4710\Major Project\Assets\';
-video_name = 'demo1.MOV';
+video_name = 'webcam2.mp4';
 source_name = strcat(path_name,video_name);
 % Load the video
 videoReader = VideoReader(source_name);
@@ -22,26 +22,49 @@ runLoop = true;
 while hasFrame(videoReader) && runLoop
     
     % read the next frame
-    frame = readFrame(videoReader); 
+    videoFrame = readFrame(videoReader); 
     % Correct the perspective of the frame
-    perspective_correct = imtransform(frame, tform_param);
-    frame = imcrop(perspective_correct, crop_rectangle);
+    perspective_correct = imtransform(videoFrame, tform_param);
+    videoFrame = imcrop(perspective_correct, crop_rectangle);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Detect the hand from the frame
-    [result, bw, hand_flag] = track_hands(frame, foregroundDetector, blobAnalysis);
+    [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
     
     % display results
     step(videoPlayer, result); 
     
-    while hand_flag == 0
-        [move_array, dice_position] =  get_dice_results(frame);
+     %%%%%%%% Do image processing here %%%%%%%%%%%
+    % if hand is not detected, initiate dice detection
+    if hand_flag == 0
+        pause(1); % wait for the dice to settle
+        % Detect dice
+        [move_array, dice_position] =  get_dice_results(videoFrame);
+        % if no dice detected, continue detection process
+        if isempty(move_array)
+            disp("Dice not detected, throw the dice again");
+        else
+            % if dice is detected, draw bounding boxes on the dice
+            disp(move_array);
+            % display bouding boxes on die
+            result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
+            step(videoPlayer, result_dice);
+        end
+    end
+    
+    % While no motion is detected, keep on detecting
+    while hand_flag == 0 && runLoop
+        %%%%%%%%%%%%% do nothing%%%%%%%%%%%%%%%%
         
-        % display bouding boxes on die
-        result_dice = insertShape(frame, 'Rectangle', dice_position, 'Color', 'red'); 
-        step(videoPlayer, result_dice);
+        videoFrame = readFrame(videoReader); 
+        % Correct the perspective of the camera
+        perspective_correct = imtransform(videoFrame, tform_param);
+        videoFrame = imcrop(perspective_correct, crop_rectangle);
         
-        hand_flag = 1;
+        [result, bw, hand_flag] = track_hands(videoFrame, foregroundDetector, blobAnalysis);
+        
+        % Check whether the video player window has been closed.
+        runLoop = isOpen(videoPlayer); 
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%

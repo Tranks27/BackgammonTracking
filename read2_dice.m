@@ -22,9 +22,9 @@ function [dice_result1, dice_result2] = read2_dice(cropped_dice_im)
     % shape (easier to filter later)
     padded_dice_im = padarray(morph,[60,60],0, 'both');
 
-    figure(15)
-    imshow(~padded_dice_im);
-    
+%     figure(15)
+%     imshow(~padded_dice_im);
+%     
     % Count the shapes and their pixel areas
     find_shapes = bwconncomp(~padded_dice_im);
     get_pixels = cellfun(@numel,find_shapes.PixelIdxList)
@@ -45,9 +45,17 @@ function [dice_result1, dice_result2] = read2_dice(cropped_dice_im)
     % Source code: https://au.mathworks.com/matlabcentral/answers/364870-count-dots-on-dice-wich-are-connected
     % Calculate centroid for each dot
     stats = struct2table(regionprops(find_shapes,'Centroid'));
-    % Clustering dots by k-means
-    cluster_idx = kmeans(stats.Centroid,2);
     
+    % Ensure that there is enough datapoints for Kmeans (ie. more than 2)
+    % If so, proceed. If not, return NaN for die rolls
+    if(length(stats.Centroid(:,1)) < 2)
+           dice_result1 = NaN;
+           dice_result2 = NaN;
+           return;
+    else
+        % Clustering dots by k-means
+        cluster_idx = kmeans(stats.Centroid,2);
+    end
 
     % Count using a histogram counter method
     [num] = histcounts(cluster_idx,2);

@@ -16,5 +16,5 @@ function [foregroundDetector, blobAnalysis] = init_handtracking_video(videoReade
 
     % Optimal learning rate to determine how quickly it adapts to changing
     % conditions
-    foregroundDetector.LearningRate = 0.02;
+    foregroundDetector.LearningRate = 0.01;
 end

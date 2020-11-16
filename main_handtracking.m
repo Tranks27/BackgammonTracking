@@ -47,9 +47,13 @@ global movement
 movement = 0;
 
 recordedMoves = fopen('record.txt', 'w');
-finalText = sprintf("Backgammon Record\n");
-fwrite(recordedMoves, finalText);
+finalText = sprintf("Backgammon Transcript\nTournament Date: ");
+t = datetime('now','TimeZone','local','Format','d-MMM-y HH:mm:ss Z');
+datestring = string(cellstr(t));
+newL = sprintf("\n");
+fwrite(recordedMoves, strcat(finalText,datestring,newL));
 fclose(recordedMoves);
+
 
 turn_count = 0;
 % White starts first
@@ -94,7 +98,7 @@ while runLoop
             % display bouding boxes on die
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
             step(videoPlayer, result_dice);
-            
+
             %%%%%%%checkers detection
             
             [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p)

@@ -139,13 +139,20 @@ elseif(dice_total_obj == 1)
  
 end
 
+
 % Logic to determine what moves are allowed and detect any errors
 if(first_die_result > 6 || second_die_result > 6 || first_die_result + second_die_result < 2 || first_die_result + second_die_result > 12 )
    
-   disp("Error with dice roll, please move dice to darker background or adjust camera position/lighting"); 
-   
-   move_array = [];
-   
+    disp("Error with dice roll, please move dice to darker background or adjust camera position/lighting"); 
+
+    move_array = [];
+    dice_position = [0,0,0,0;0,0,0,0];
+
+elseif(isnan(first_die_result) || isnan(second_die_result))
+        
+    disp("Error: only one die detected; please move both dice to darker background or adjust camera position/lighting"); 
+    move_array = [];
+    dice_position = [0,0,0,0;0,0,0,0];
 else
     
     move_array = sort([first_die_result, second_die_result],'descend');

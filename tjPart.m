@@ -108,11 +108,16 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
     if count == 0 || count == 2
         
         if count == 0
-            
-            status = "Start of Turn";
+            t = datetime('now','TimeZone','local','Format','HH:mm:ss');
+            datestring = string(cellstr(t));
+            status = "-----Start of Turn";
+            status = strcat(datestring,status);
         else
+            t = datetime('now','TimeZone','local','Format','HH:mm:ss');
+            datestring = string(cellstr(t));
+            status = "-----End of Turn";
+            status = strcat(datestring,status);
             
-            status = "End of Turn";
         end
         
         if turn_player == 1
