@@ -1,4 +1,4 @@
-function [move1 move2 move1p] = identifyAllPossibilities(diceRoll, turn, idMatFull, pieces, returnable, available, unavailable)
+function [move1 move1p] = identifyAllPossibilities(diceRoll, turn, idMatFull, pieces, returnable, available, unavailable)
 
     if length(diceRoll) == 4
         
@@ -19,7 +19,7 @@ function [move1 move2 move1p] = identifyAllPossibilities(diceRoll, turn, idMatFu
     else
         movement = 1;
     end
-
+    
     if diceRolls(1) == diceRolls(2)
     
         possibleMovements(1,:) = [diceRolls(1) 2*diceRolls(1)];
@@ -161,6 +161,5 @@ function [move1 move2 move1p] = identifyAllPossibilities(diceRoll, turn, idMatFu
     end
     
     move1 = newBuf1;
-    move2 = newBuf2;
     move1p = newBuf1p;
 end
