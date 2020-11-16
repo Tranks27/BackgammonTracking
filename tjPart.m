@@ -3,7 +3,7 @@
 % SID 470341300
 
 % Initial Setup
-function [finished_turn, countNew] = tjPart(videoFrame, move_array, count)
+function [finished_turn, countNew, playerTurn] = tjPart(videoFrame, move_array, count, turn_player)
     
     finished = 0;
 
@@ -11,7 +11,7 @@ function [finished_turn, countNew] = tjPart(videoFrame, move_array, count)
 
         % Return from Josiah
         diceRolls = move_array;
-        turn = randi(2);
+        turn = turn_player;
 
         returnable = [0 0];
 
@@ -41,6 +41,13 @@ function [finished_turn, countNew] = tjPart(videoFrame, move_array, count)
             countNew = count + firstDone + secondDone;
             if secondDone == 1
                 finished = 1;
+                
+                % change turn
+                if turn == 1
+                    playerTurn = 2;
+                else
+                    playerTurn = 1;
+                end
             end
         elseif count == 2
             
@@ -66,9 +73,9 @@ function [finished_turn, countNew] = tjPart(videoFrame, move_array, count)
             %end
             % change turn
             if turn == 1
-                turn = 2;
+                playerTurn = 2;
             else
-                turn = 1;
+                playerTurn = 1;
             end
 
             countNew = count + 1;

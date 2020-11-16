@@ -22,6 +22,8 @@ sampleFrame = imcrop(perspective_correct, crop_rectangle);
 % initiate checkers detection
 initialStage(sampleFrame);
 turn_count = 0;
+% White starts first
+turn_player = 1;
 
 runLoop = true;
 while runLoop
@@ -60,7 +62,7 @@ while runLoop
             %%%%%%%checkers detection
             
                 
-            [finished_turn, turn_count] = tjPart(videoFrame, move_array, turn_count);
+            [finished_turn, turn_count, turn_player] = tjPart(videoFrame, move_array, turn_count, turn_player);
             % reset count
             if turn_count == 3
                 turn_count = 0;

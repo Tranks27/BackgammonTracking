@@ -21,6 +21,8 @@ sampleFrame = imcrop(perspective_correct, crop_rectangle);
 
 % initiate checkers detection
 initialStage(sampleFrame);
+turn_count = 0;
+
 
 runLoop = true;
 while runLoop
@@ -56,7 +58,14 @@ while runLoop
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
             step(videoPlayer, result_dice);
             
-            %%%%%%%checkers 
+            %%%%%%%checkers detection
+            
+                
+            [finished_turn, turn_count] = tjPart(videoFrame, move_array, turn_count);
+            % reset count
+            if turn_count == 3
+                turn_count = 0;
+            end
         end
     end
     
