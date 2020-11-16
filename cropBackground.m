@@ -1,7 +1,6 @@
-function cropBackground()
+function cropBackground(videoFrame)
 
-    filename = strcat('cropped_1.jpeg');
-    image = imread(filename);
+    image = videoFrame;
     
     [row, col] = size(image(:,:,1));
     
