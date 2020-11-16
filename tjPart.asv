@@ -5,7 +5,7 @@
 % Initial Setup
 function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, count, turn_player, idMatrix, pieceMatrix, move1, move1p)
     
-    recordedMoves = fopen('record.txt', 'w');
+    recordedMoves = fopen('record.txt');
 
     finished = 0;
 
@@ -106,31 +106,12 @@ function [finished_turn, countNew, playerTurn, id_Matrix, piece_Matrix, move_1, 
     end
     
     playerString = "";
-    status = "";
     if count == 0 || count == 3
-        
-        if count == 0
-            
-            status = strcpy("Start of Turn");
-        else
-            
-            status = strcpy("End of Turn");
-        end
         
         if turn == 1
             
-            playerString = strcpy("White");
             
-        else
-            
-            playerString = strcpy("Brown");
         end
-        
-        outputString1 = strcat(playerString, " - ", status, ": \n");
-        outputString2 = strcat("Colour ID:      ", num2str(idMatFull),"\n");
-        outputString3 = strcat("No. of Pieces:  ",num2str(pieces), "\n");
-        
-        recordedMoves = [recordedMoves outputString1 outputString2 outputString3];
     end
     
     if count == 3
