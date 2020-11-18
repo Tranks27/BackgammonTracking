@@ -1,6 +1,7 @@
 # BackgammonTracking
 
 Hardware requirements: webcam
+
 Software requirements: MATLAB with Add ons: Image Processing Toolbox
 
 Instruction to run the code:
