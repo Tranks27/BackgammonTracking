@@ -1,7 +1,7 @@
 clc;
 clear;
 
-path_name = 'C:\Users\might\Desktop\Year 4 Sem 2\AMME4710\Major Project\Assets\';
+path_name = 'Assets\';
 video_name = 'webcam2.mp4';
 source_name = strcat(path_name,video_name);
 % Load the video
