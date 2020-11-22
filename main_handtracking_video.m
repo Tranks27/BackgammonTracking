@@ -18,6 +18,44 @@ sampleFrame = readFrame(videoReader);
 % Create the video player object.
 videoPlayer = vision.VideoPlayer('Position', crop_rectangle);
 
+%%%%%%% Requirements for checkers detection
+% Correct the perspective of the camera
+perspective_correct = imtransform(sampleFrame, tform_param);
+sampleFrame = imcrop(perspective_correct, crop_rectangle);
+
+% initiate checkers detection
+boardSet = 0;
+while boardSet == 0
+    % Get the next frame.
+    videoFrame = readFrame(videoReader);
+    % Correct the perspective of the camera
+    perspective_correct = imtransform(videoFrame, tform_param);
+    videoFrame = imcrop(perspective_correct, crop_rectangle);
+    [a,b, boardSet] = initialStage(videoFrame);
+end
+
+global movement
+movement = 0;
+
+recordedMoves = fopen('record.txt', 'w');
+finalText = sprintf("Backgammon Transcript\nTournament Date: ");
+t = datetime('now','TimeZone','local','Format','d-MMM-y HH:mm:ss Z');
+datestring = string(cellstr(t));
+newL = sprintf("\n");
+fwrite(recordedMoves, strcat(finalText,datestring,newL));
+fclose(recordedMoves);
+
+
+turn_count = 0;
+% White starts first
+turn_player = 1;
+
+% ID matrices and pieces
+id_Matrix = [];
+pieces_Matrix = [];
+move_1 = [];
+move_1p = [];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 runLoop = true;
 while hasFrame(videoReader) && runLoop
     
@@ -49,6 +87,17 @@ while hasFrame(videoReader) && runLoop
             % display bouding boxes on die
             result_dice = insertShape(videoFrame, 'Rectangle', dice_position, 'Color', 'red'); 
             step(videoPlayer, result_dice);
+            
+            %%%%%%%checkers detection
+            
+            [finished_turn, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p] = tjPart(videoFrame, move_array, turn_count, turn_player, id_Matrix, pieces_Matrix, move_1, move_1p)
+            % reset count
+            turn_count = mod(turn_count, 3);
+            if finished_turn == 1
+                disp('next player');
+                finished_turn = 0;
+            end
+            %%%%%%%%%%%%%%%%%%%%%%%%%%
         end
     end
     
